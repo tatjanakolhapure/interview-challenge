@@ -3,24 +3,26 @@ import "./menu-builder.css";
 import { MenuItem } from "./menu-item.js";
 
 export function MenuBuilder(props) {
-  const menuItems = (props.menuItems || []).map((menuItem) => (
-    <MenuItem
-      key={menuItem.id}
-      menuItem={menuItem}
-      onClick={() => props.onClick(menuItem.id)}
-    />
-  ));
+  const menuItems = (props.menuItems || []).map((menuItem) =>
+    renderMenuItem(menuItem)
+  );
 
   const selectedMenuItems = props.selectedMenuItems.length
-    ? props.selectedMenuItems.map((menuItem) => (
-        <MenuItem
-          key={menuItem.id}
-          menuItem={menuItem}
-          onClick={() => props.onClick(menuItem.id)}
-          onRemoveClick={() => props.onRemoveClick(menuItem.id)}
-        />
-      ))
+    ? props.selectedMenuItems.map((menuItem) => renderMenuItem(menuItem, true))
     : null;
+
+  function renderMenuItem(menuItem, isRemovable = false) {
+    return (
+      <MenuItem
+        key={menuItem.id}
+        menuItem={menuItem}
+        onClick={() => props.onClick(menuItem.id)}
+        onRemoveClick={
+          isRemovable ? () => props.onRemoveClick(menuItem.id) : null
+        }
+      />
+    );
+  }
 
   return (
     <div className="container menu-builder">
