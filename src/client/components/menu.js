@@ -25,6 +25,30 @@ export class Menu extends React.Component {
       );
   }
 
+  onSearch(searchTerm) {
+    fetch(`/api/items?search=${searchTerm}`)
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            menuItems: result.items,
+          });
+        },
+        (error) => {}
+      );
+  }
+
+  removeMenuItem(menuItemId) {
+    const selectedMenuItems = [...this.state.selectedMenuItems].filter(
+      (menuItem) => menuItem.id !== menuItemId
+    );
+
+    this.setState({
+      menuItems: this.state.menuItems,
+      selectedMenuItems,
+    });
+  }
+
   selectMenuItem(menuItemId) {
     const selectedMenuItem = this.state.menuItems.filter(
       (menuItem) => menuItem.id === menuItemId
@@ -40,17 +64,6 @@ export class Menu extends React.Component {
     }
   }
 
-  removeMenuItem(menuItemId) {
-    const selectedMenuItems = [...this.state.selectedMenuItems].filter(
-      (menuItem) => menuItem.id !== menuItemId
-    );
-
-    this.setState({
-      menuItems: this.state.menuItems,
-      selectedMenuItems,
-    });
-  }
-
   render() {
     return (
       <div className="wrapper">
@@ -60,6 +73,7 @@ export class Menu extends React.Component {
           selectedMenuItems={this.state.selectedMenuItems}
           onClick={(menuItemId) => this.selectMenuItem(menuItemId)}
           onRemoveClick={(menuItemId) => this.removeMenuItem(menuItemId)}
+          onSearch={(searchTerm) => this.onSearch(searchTerm)}
         />
       </div>
     );
