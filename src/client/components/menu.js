@@ -25,7 +25,7 @@ export class Menu extends React.Component {
       );
   }
 
-  handleClick(menuItemId) {
+  selectMenuItem(menuItemId) {
     const selectedMenuItem = this.state.menuItems.filter(
       (menuItem) => menuItem.id === menuItemId
     )[0];
@@ -40,6 +40,17 @@ export class Menu extends React.Component {
     }
   }
 
+  removeMenuItem(menuItemId) {
+    const selectedMenuItems = [...this.state.selectedMenuItems].filter(
+      (menuItem) => menuItem.id !== menuItemId
+    );
+
+    this.setState({
+      menuItems: this.state.menuItems,
+      selectedMenuItems,
+    });
+  }
+
   render() {
     return (
       <div className="wrapper">
@@ -47,7 +58,8 @@ export class Menu extends React.Component {
         <MenuBuilder
           menuItems={this.state.menuItems}
           selectedMenuItems={this.state.selectedMenuItems}
-          onClick={(menuItemId) => this.handleClick(menuItemId)}
+          onClick={(menuItemId) => this.selectMenuItem(menuItemId)}
+          onRemoveClick={(menuItemId) => this.removeMenuItem(menuItemId)}
         />
       </div>
     );

@@ -13,11 +13,20 @@ export function MenuItem(props) {
         ))
       : [];
 
+  function onRemoveClick(event) {
+    event.stopPropagation();
+    props.onRemoveClick();
+  }
+
   return props.menuItem ? (
     <li className="item" onClick={props.onClick}>
       <h2>{props.menuItem.name}</h2>
       <p>{dietaries}</p>
-      {props.isRemovable ? <button className="remove-item">x</button> : null}
+      {props.onRemoveClick ? (
+        <button type="button" className="remove-item" onClick={onRemoveClick}>
+          x
+        </button>
+      ) : null}
     </li>
   ) : null;
 }

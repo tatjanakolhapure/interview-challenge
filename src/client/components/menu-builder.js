@@ -16,8 +16,8 @@ export function MenuBuilder(props) {
         <MenuItem
           key={menuItem.id}
           menuItem={menuItem}
-          isRemovable="true"
           onClick={() => props.onClick(menuItem.id)}
+          onRemoveClick={() => props.onRemoveClick(menuItem.id)}
         />
       ))
     : null;
