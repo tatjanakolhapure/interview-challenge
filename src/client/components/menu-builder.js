@@ -4,12 +4,23 @@ import { MenuItem } from "./menu-item.js";
 
 export function MenuBuilder(props) {
   const menuItems = (props.menuItems || []).map((menuItem) => (
-    <MenuItem key={menuItem.id} menuItem={menuItem} />
+    <MenuItem
+      key={menuItem.id}
+      menuItem={menuItem}
+      onClick={() => props.onClick(menuItem.id)}
+    />
   ));
 
-  const seletedMenuItems = (props.seletedMenuItems || []).map((menuItem) => (
-    <MenuItem key={menuItem.id} menuItem={menuItem} isRemovable="true" />
-  ));
+  const selectedMenuItems = props.selectedMenuItems.length
+    ? props.selectedMenuItems.map((menuItem) => (
+        <MenuItem
+          key={menuItem.id}
+          menuItem={menuItem}
+          isRemovable="true"
+          onClick={() => props.onClick(menuItem.id)}
+        />
+      ))
+    : null;
 
   return (
     <div className="container menu-builder">
@@ -22,7 +33,7 @@ export function MenuBuilder(props) {
         </div>
         <div className="col-8">
           <h2>Menu preview</h2>
-          <ul className="menu-preview">{seletedMenuItems}</ul>
+          <ul className="menu-preview">{selectedMenuItems}</ul>
         </div>
       </div>
     </div>

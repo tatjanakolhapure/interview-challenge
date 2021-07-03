@@ -14,7 +14,7 @@ export function MenuItem(props) {
       : [];
 
   return props.menuItem ? (
-    <li className="item">
+    <li className="item" onClick={props.onClick}>
       <h2>{props.menuItem.name}</h2>
       <p>{dietaries}</p>
       {props.isRemovable ? <button className="remove-item">x</button> : null}

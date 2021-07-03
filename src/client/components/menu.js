@@ -25,11 +25,30 @@ export class Menu extends React.Component {
       );
   }
 
+  handleClick(menuItemId) {
+    const selectedMenuItem = this.state.menuItems.filter(
+      (menuItem) => menuItem.id === menuItemId
+    )[0];
+
+    if (selectedMenuItem) {
+      this.setState({
+        menuItems: this.state.menuItems,
+        selectedMenuItems: [
+          ...new Set([...this.state.selectedMenuItems, selectedMenuItem]),
+        ],
+      });
+    }
+  }
+
   render() {
     return (
       <div className="wrapper">
         <MenuSummary />
-        <MenuBuilder menuItems={this.state.menuItems} />
+        <MenuBuilder
+          menuItems={this.state.menuItems}
+          selectedMenuItems={this.state.selectedMenuItems}
+          onClick={(menuItemId) => this.handleClick(menuItemId)}
+        />
       </div>
     );
   }
