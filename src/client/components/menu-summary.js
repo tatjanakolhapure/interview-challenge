@@ -12,7 +12,7 @@ export function MenuSummary(props) {
     );
   }
 
-  const dietaries = (props.dietaries || []).map((dietary) =>
+  const dietaries = (props?.dietaries || []).map((dietary) =>
     renderDietary(dietary)
   );
 
@@ -21,7 +21,7 @@ export function MenuSummary(props) {
       <div className="container">
         <div className="row">
           <div className="col-6 menu-summary-left">
-            <span>{props.total || 0} items</span>
+            <span>{props?.total || 0} items</span>
           </div>
           <div className="col-6 menu-summary-right">{dietaries}</div>
         </div>
