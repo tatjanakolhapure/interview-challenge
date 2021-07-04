@@ -9,6 +9,7 @@ export class Menu extends React.Component {
     this.state = {
       menuItems: [],
       selectedMenuItems: [],
+      dietaries: [],
     };
   }
 
@@ -18,11 +19,38 @@ export class Menu extends React.Component {
       .then(
         (result) => {
           this.setState({
-            menuItems: result.items,
+            menuItems: result?.items,
           });
         },
         (error) => {}
       );
+  }
+
+  getDietaries(items) {
+    const itemDietaries = items.reduce((result, item) => {
+      result.push(...item.dietaries);
+      return result;
+    }, []);
+
+    const dietaries = [];
+
+    itemDietaries.forEach((item) => {
+      const matchingDietaries = dietaries.filter((dietary) => {
+        return dietary.name === item;
+      });
+      const total = (matchingDietaries?.[0]?.total || 0) + 1;
+
+      if (matchingDietaries?.length) {
+        matchingDietaries[0].total = total;
+      } else {
+        dietaries.push({
+          name: item,
+          total,
+        });
+      }
+    });
+
+    return dietaries;
   }
 
   onSearch(searchTerm) {
@@ -44,8 +72,8 @@ export class Menu extends React.Component {
     );
 
     this.setState({
-      menuItems: this.state.menuItems,
       selectedMenuItems,
+      dietaries: this.getDietaries(selectedMenuItems),
     });
   }
 
@@ -54,12 +82,14 @@ export class Menu extends React.Component {
       (menuItem) => menuItem.id === menuItemId
     )[0];
 
+    const selectedMenuItems = [
+      ...new Set([...this.state.selectedMenuItems, selectedMenuItem]),
+    ];
+
     if (selectedMenuItem) {
       this.setState({
-        menuItems: this.state.menuItems,
-        selectedMenuItems: [
-          ...new Set([...this.state.selectedMenuItems, selectedMenuItem]),
-        ],
+        selectedMenuItems,
+        dietaries: this.getDietaries(selectedMenuItems),
       });
     }
   }
@@ -67,7 +97,10 @@ export class Menu extends React.Component {
   render() {
     return (
       <div className="wrapper">
-        <MenuSummary />
+        <MenuSummary
+          dietaries={this.state.dietaries}
+          total={this.state.selectedMenuItems?.length}
+        />
         <MenuBuilder
           menuItems={this.state.menuItems}
           selectedMenuItems={this.state.selectedMenuItems}
